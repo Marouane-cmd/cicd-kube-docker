@@ -1,11 +1,7 @@
 pipeline {
 
     agent any
-/*
-	tools {
-        maven "maven3"
-    }
-*/
+
     environment {
         registry = "kubeimran/vproappdock"
         registryCredential = 'dockerhub'
@@ -91,7 +87,7 @@ pipeline {
           }
         }
 
-         stage ('Upload Image'){
+        stage ('Cleanup Docker Image'){
            steps{
              sh "docker rmi $registry:V$BUILD_NUMBER"
            }
@@ -102,9 +98,7 @@ pipeline {
              steps {
                sh "helm upgrade --install --force vprofile-stack helm/vprofilecharts --set appimage=${registry}:V${BUILD_NUMBER} --namespace prod"
              }
-
          }
-
 
       }
 }
